@@ -45,7 +45,7 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
                         .use { input ->
                             val bytes = ByteArray(input.available())
                             input.read(bytes)
-                            filament.assetLoader.createAssetFromBinary(ByteBuffer.wrap(bytes))!!
+                            filament.assetLoader.createAsset(ByteBuffer.wrap(bytes))!!
                         }
                 }
                     .also { filament.resourceLoader.loadResources(it) }
@@ -92,7 +92,7 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
 
                 doFrameEvents.collect { frame ->
                     // update animator
-                    val animator = filamentAsset.animator
+                    val animator = filamentAsset.instance.animator
 
                     if (animator.animationCount > 0) {
                         animator.applyAnimation(

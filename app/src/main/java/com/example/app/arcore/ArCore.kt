@@ -27,7 +27,7 @@ class ModelBuffers(val clipPosition: V2A, val uvs: V2A, val triangleIndices: Sho
 @SuppressLint("MissingPermission")
 class ArCore(private val activity: Activity, val filament: Filament, private val view: View) {
     companion object {
-        const val near: Float = 0.1f
+        const val near: Float = 0.01f
         const val far: Float = 30f
         private const val positionBufferIndex: Int = 0
         private const val uvBufferIndex: Int = 1
@@ -49,7 +49,7 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
             session.config
                 .apply {
                     planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
-                    focusMode = Config.FocusMode.AUTO
+                    focusMode = Config.FocusMode.FIXED
 
                     // reading depth information is broken with latest filament
                     depthMode =
@@ -182,12 +182,6 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
             val width = dimensions[0]
             val height = dimensions[1]
 
-            stream = Stream
-                .Builder()
-                .stream(cameraStreamTextureId.toLong())
-                .width(width)
-                .height(height)
-                .build(filament.engine)
 
             flatMaterialInstance = activity
                 .readUncompressedAsset("materials/flat.filamat")
@@ -203,10 +197,10 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
                         "cameraTexture",
                         Texture
                             .Builder()
+                            .importTexture(cameraStreamTextureId.toLong())
                             .sampler(Texture.Sampler.SAMPLER_EXTERNAL)
                             .format(Texture.InternalFormat.RGB8)
-                            .build(filament.engine)
-                            .apply { setExternalStream(filament.engine, stream) },
+                            .build(filament.engine),
                         TextureSampler(
                             TextureSampler.MinFilter.LINEAR,
                             TextureSampler.MagFilter.LINEAR,
@@ -231,7 +225,7 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
             ?.let {
                 if (hasDepthImage.not()) {
                     try {
-                        val depthImage = frame.acquireDepthImage() as ArImage
+                        val depthImage = frame.acquireDepthImage16Bits()
 
                         if (depthImage.planes[0].buffer[0] != 0.toByte()) {
                             hasDepthImage = true
