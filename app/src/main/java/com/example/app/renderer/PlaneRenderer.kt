@@ -5,8 +5,8 @@ import com.example.app.*
 import com.example.app.R
 import com.example.app.filament.Filament
 import com.google.android.filament.*
-import com.google.android.filament.textured.TextureType
-import com.google.android.filament.textured.loadTexture
+import com.google.android.filament.utils.TextureType
+import com.google.android.filament.utils.loadTexture
 import com.google.ar.core.Frame
 import com.google.ar.core.Plane
 import com.google.ar.core.TrackingState
@@ -39,6 +39,14 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
                 "texture",
                 loadTexture(filament.engine, context.resources, R.drawable.sceneform_plane, TextureType.COLOR),
                 TextureSampler().also { it.anisotropy = 8.0f },
+            )
+
+            materialInstance.setParameter(
+                "uvTransform",
+                MaterialInstance.FloatElement.FLOAT4,
+                m4Identity().floatArray,
+                0,
+                4,
             )
 
             materialInstance.setParameter("alpha", 1f)

@@ -7,6 +7,14 @@ material {
         {
             type : sampler2d,
             name : texture
+        },
+        {
+            type : float4x4,
+            name : uvTransform
+        },
+        {
+            type : float,
+            name : alpha
         }
     ],
     requires : [
@@ -17,5 +25,6 @@ fragment {
     void material(inout MaterialInputs material) {
         prepareMaterial(material);
         material.baseColor = texture(materialParams_texture, getUV0());
+        material.baseColor.a = material.baseColor.a * materialParams.alpha;
     }
 }
