@@ -20,6 +20,7 @@ import com.google.android.filament.RenderableManager.PrimitiveType
 import com.google.android.filament.VertexBuffer.AttributeType
 import com.google.android.filament.VertexBuffer.VertexAttribute
 import com.google.ar.core.*
+import timber.log.Timber
 import kotlin.math.roundToInt
 
 class ModelBuffers(val clipPosition: V2A, val uvs: V2A, val triangleIndices: ShortArray)
@@ -34,7 +35,6 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
     }
 
     private val cameraStreamTextureId: Int = createExternalTextureId()
-    private lateinit var stream: Stream
     private lateinit var depthMaterialInstance: MaterialInstance
     private lateinit var flatMaterialInstance: MaterialInstance
 
@@ -267,7 +267,7 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
                             null
                         }
                     } catch (error: Throwable) {
-                        null
+                        Timber.w(error)
                     }
                 } else Unit
             }
@@ -368,10 +368,10 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
                     "cameraTexture",
                     Texture
                         .Builder()
+                        .importTexture(cameraStreamTextureId.toLong())
                         .sampler(Texture.Sampler.SAMPLER_EXTERNAL)
                         .format(Texture.InternalFormat.RGB8)
-                        .build(filament.engine)
-                        .apply { setExternalStream(filament.engine, stream) },
+                        .build(filament.engine),
                     TextureSampler(
                         TextureSampler.MinFilter.LINEAR,
                         TextureSampler.MagFilter.LINEAR,
