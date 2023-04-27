@@ -19,6 +19,11 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
         data class Update(val rotate: Float, val scale: Float) : ModelEvent()
     }
 
+    data class TrackingEvent(val tracking: Boolean = true)
+
+    val trackingEvents: MutableSharedFlow<TrackingEvent> =
+        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
     val modelEvents: MutableSharedFlow<ModelEvent> =
         MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
@@ -51,6 +56,21 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
                     .also { filament.resourceLoader.loadResources(it) }
 
             launch {
+                trackingEvents
+                    .first { trackingEvent ->
+                        if (trackingEvent.tracking) {
+                            modelEvents.tryEmit(
+                                ModelEvent.Move(
+                                    ScreenPosition(x = 0.5f, y = 0.5f)
+                                )
+                            )
+                            return@first true
+                        }
+                        return@first false
+                    }
+            }
+
+            launch {
                 // translation
                 modelEvents
                     .mapNotNull { modelEvent ->
@@ -77,6 +97,7 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
                     when (modelEvent) {
                         is ModelEvent.Update ->
                             Pair((rotate + modelEvent.rotate).clampToTau, scale * modelEvent.scale)
+
                         else ->
                             Pair(rotate, scale)
                     }

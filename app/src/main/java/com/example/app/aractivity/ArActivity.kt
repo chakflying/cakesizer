@@ -335,6 +335,9 @@ class ArActivity : AppCompatActivity() {
                                         .any { it.trackingState == TrackingState.TRACKING }
                                 ) {
                                     arTrackingEvents.tryEmit(Unit)
+                                    modelRenderer.trackingEvents.tryEmit(
+                                        ModelRenderer.TrackingEvent()
+                                    )
                                 }
 
                                 lightRenderer.doFrame(frame)
