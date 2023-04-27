@@ -1,6 +1,12 @@
 buildscript {
     ext {
         kotlin_version = '1.8.10'
+        arrow_version = '1.2.0-RC'
+        filament_version = '1.32.4'
+        arcore_version = '1.36.0'
+        coroutines_version = '1.6.4'
+        lifecycle_version = '2.6.1'
+        navigation_version = '2.5.3'
     }
     repositories {
         google()
@@ -15,7 +21,7 @@ buildscript {
         classpath 'com.google.gms:google-services:4.3.15'
         classpath 'com.google.firebase:perf-plugin:1.4.2'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.5'
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.5.3'
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
     }
 }
 
