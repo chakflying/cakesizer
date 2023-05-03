@@ -56,12 +56,6 @@ dependencies {
     implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
 
-    implementation 'androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03'
-
-    implementation 'androidx.interpolator:interpolator:1.0.0'
-
-    api 'androidx.annotation:annotation:1.6.0'
-
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
     api 'androidx.savedstate:savedstate:1.2.1'
@@ -70,8 +64,6 @@ dependencies {
 
     api 'androidx.transition:transition:1.4.1'
 
-    api 'androidx.biometric:biometric:1.1.0'
-
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
     api "androidx.lifecycle:lifecycle-livedata-core-ktx:$lifecycle_version"
     api "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
@@ -79,42 +71,19 @@ dependencies {
     api "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
     api "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    api 'androidx.work:work-runtime-ktx:2.7.0'
-    api 'androidx.work:work-gcm:2.7.0'
+    api "androidx.work:work-runtime-ktx:$workmanager_version"
 
     implementation 'androidx.emoji:emoji:1.1.0'
     implementation 'androidx.emoji:emoji-appcompat:1.1.0'
 
-    api 'androidx.room:room-runtime:2.3.0'
-    api 'androidx.room:room-ktx:2.3.0'
-    kapt 'androidx.room:room-compiler:2.3.0'
-
-    implementation 'androidx.sqlite:sqlite-ktx:2.1.0'
-
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     api 'androidx.constraintlayout:constraintlayout:2.1.4'
-    api 'androidx.recyclerview:recyclerview:1.2.1'
-    api 'androidx.coordinatorlayout:coordinatorlayout:1.1.0'
-    api 'androidx.drawerlayout:drawerlayout:1.1.1'
-    api 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    api 'androidx.gridlayout:gridlayout:1.0.0'
-    api 'androidx.cardview:cardview:1.0.0'
-    api 'androidx.viewpager:viewpager:1.0.0'
-    api 'androidx.browser:browser:1.4.0'
-
-    api 'androidx.slice:slice-builders:1.1.0-alpha02'
-    api 'androidx.slice:slice-builders-ktx:1.0.0-alpha6'
-
-    api 'androidx.slice:slice-core:1.1.0-alpha02'
-    api 'androidx.slice:slice-view:1.1.0-alpha02'
 
     // KTX Extensions
     api 'androidx.core:core-ktx:1.10.0'
 
     api 'androidx.activity:activity-ktx:1.7.1'
-
-    implementation 'androidx.benchmark:benchmark-junit4:1.0.0'
 
     implementation 'androidx.collection:collection-ktx:1.2.0'
 
@@ -125,10 +94,7 @@ dependencies {
     api "androidx.navigation:navigation-ui-ktx:$navigation_version"
     api "androidx.navigation:navigation-dynamic-features-fragment:$navigation_version"
 
-    api 'androidx.paging:paging-common-ktx:3.1.0'
-    api 'androidx.paging:paging-runtime-ktx:3.1.0'
-
-    implementation 'androidx.preference:preference-ktx:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     implementation 'com.google.android.play:core-ktx:1.8.1'
 
