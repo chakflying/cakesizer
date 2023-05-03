@@ -20,6 +20,7 @@ import com.google.android.filament.RenderableManager.PrimitiveType
 import com.google.android.filament.VertexBuffer.AttributeType
 import com.google.android.filament.VertexBuffer.VertexAttribute
 import com.google.ar.core.*
+import com.google.ar.core.exceptions.NotYetAvailableException
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -267,7 +268,10 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
                             null
                         }
                     } catch (error: Throwable) {
-                        Timber.w(error)
+                        if (error !is NotYetAvailableException) {
+                            Timber.w(error)
+                        }
+                        null
                     }
                 } else Unit
             }
