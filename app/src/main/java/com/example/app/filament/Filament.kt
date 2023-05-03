@@ -15,7 +15,7 @@ import com.google.android.filament.gltfio.UbershaderProvider
 
 class Filament(context: Context, val surfaceView: SurfaceView) {
     var timestamp: Long = 0L
-    private val eglContext: EGLContext = createEglContext().orNull()!!
+    private val eglContext: EGLContext = createEglContext().getOrNull()!!
     val engine: Engine = Engine.create(eglContext)
     val renderer: Renderer = engine.createRenderer()
     val scene: Scene = engine.createScene()
