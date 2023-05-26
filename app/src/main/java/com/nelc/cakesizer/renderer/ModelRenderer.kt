@@ -10,10 +10,17 @@ import com.google.ar.core.Point
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
+import java.io.File
 import java.nio.ByteBuffer
 import java.util.concurrent.TimeUnit
 
-class ModelRenderer(context: Context, private val arCore: ArCore, private val filament: Filament) {
+class ModelRenderer(
+    context: Context,
+    private val arCore: ArCore,
+    private val filament: Filament,
+    modelPath: String?
+) {
     sealed class ModelEvent {
         data class Move(val screenPosition: ScreenPosition) : ModelEvent()
         data class Update(val rotate: Float, val scale: Float) : ModelEvent()
@@ -44,13 +51,20 @@ class ModelRenderer(context: Context, private val arCore: ArCore, private val fi
         coroutineScope.launch {
             val filamentAsset =
                 withContext(Dispatchers.IO) {
-                    context.assets
-                        .open("eren-hiphop-dance.glb")
-                        .use { input ->
-                            val bytes = ByteArray(input.available())
-                            input.read(bytes)
-                            filament.assetLoader.createAsset(ByteBuffer.wrap(bytes))!!
-                        }
+                    if (modelPath == null) {
+                        context.assets
+                            .open("simple-cake-01.glb")
+                            .use { input ->
+                                val bytes = ByteArray(input.available())
+                                input.read(bytes)
+                                filament.assetLoader.createAsset(ByteBuffer.wrap(bytes))!!
+                            }
+                    } else {
+                        Timber.i("Loading model from $modelPath")
+                        val file = File(modelPath)
+                        val buffer = file.readBytes()
+                        filament.assetLoader.createAsset(ByteBuffer.wrap(buffer))!!
+                    }
                 }
                     .also { filament.resourceLoader.loadResources(it) }
 

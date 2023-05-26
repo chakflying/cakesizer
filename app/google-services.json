@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "123341790069",
+    "project_id": "cakesizer",
+    "storage_bucket": "cakesizer.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123341790069:android:0c926a5e2977439eec513c",
+        "android_client_info": {
+          "package_name": "com.nelc.cakesizer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123341790069-mrvrgishkr1rvsorsb8vjr8vc40v423g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd-u33mxDShVyWsvh_8xjaNA12pjK5mKM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123341790069-mrvrgishkr1rvsorsb8vjr8vc40v423g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

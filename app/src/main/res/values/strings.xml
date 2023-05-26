@@ -9,4 +9,5 @@
     <!-- camera permission dialog -->
     <string name="camera_permission_title">Camera Permission</string>
     <string name="camera_permission_message">Camera is used for Augmented Reality</string>
+    <string name="server_host">cakesizer.web.app</string>
 </resources>

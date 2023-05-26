@@ -12,7 +12,7 @@ import com.nelc.cakesizer.welcomeactivity.WelcomeScreen
 import kotlinx.coroutines.flow.MutableSharedFlow
 
 data class NavEvents(
-    val startArEvents: MutableSharedFlow<Unit>
+    val startArEvents: MutableSharedFlow<String>
 )
 
 @Composable
