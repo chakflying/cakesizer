@@ -19,7 +19,7 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class WelcomeActivity : AppCompatActivity() {
-    private val startArEvents: MutableSharedFlow<Unit> =
+    private val startArEvents: MutableSharedFlow<String> =
         MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +34,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         startArEvents.map {
             Timber.i("Start AR received")
+            arActivityIntent.putExtra("modelPath", it)
             startActivity(arActivityIntent)
         }.launchIn(scope)
 

@@ -63,9 +63,16 @@ class ArActivity : AppCompatActivity() {
     private lateinit var startScope: CoroutineScope
     private lateinit var binding: ArActivityBinding
 
+    private var modelPath: String? = null
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val extras = intent.extras
+
+        modelPath = extras?.getString("modelPath")
+
         binding = ArActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -324,7 +331,7 @@ class ArActivity : AppCompatActivity() {
             try {
                 val lightRenderer = LightRenderer(this@ArActivity, arCore.filament)
                 val planeRenderer = PlaneRenderer(this@ArActivity, arCore.filament)
-                val modelRenderer = ModelRenderer(this@ArActivity, arCore, arCore.filament)
+                val modelRenderer = ModelRenderer(this@ArActivity, arCore, arCore.filament, modelPath)
 
                 try {
                     val frameCallback =
