@@ -263,9 +263,7 @@ fun WelcomeScreen(
                                     modifier = Modifier
                                         .height(96.dp)
                                         .width(96.dp)
-                                        .clickable {
-                                            viewModel.selectedCake = cake
-                                        },
+                                        .clickable { viewModel.selectCake(cake) },
                                 ) {
                                     Box(
                                         modifier = Modifier
@@ -329,7 +327,7 @@ fun WelcomeScreen(
     if (viewModel.downloading) {
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background.copy(alpha = 0.5f),
+            color = MaterialTheme.colorScheme.background.copy(alpha = 0.7f),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),

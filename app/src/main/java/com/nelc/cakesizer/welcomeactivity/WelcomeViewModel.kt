@@ -44,14 +44,34 @@ class WelcomeViewModel @Inject constructor(
         viewModelScope.launch {
             cakes = cakesService.getCakes().getOrDefault(emptyList())
             filteredCakes = cakes
-            sizeList = cakes.map { it.size }.toSet().toList()
+            sizeList = cakes.map { it.size }.toSet().toList().sorted()
         }
     }
 
     fun setSelectedSize(size: Int) {
-        selectedSize = size
+        selectedSize = if (selectedSize == size) {
+            null
+        } else {
+            size
+        }
+        updateCakesFilter()
+    }
+
+    private fun updateCakesFilter() {
         selectedCake = null
-        filteredCakes = cakes.filter { it.size == size }
+        filteredCakes = if (selectedSize != null) {
+            cakes.filter { it.size == selectedSize }
+        } else {
+            cakes
+        }
+    }
+
+    fun selectCake(cake: Cake) {
+        selectedCake = if (selectedCake == cake) {
+            null
+        } else {
+            cake
+        }
     }
 
     fun start() {
