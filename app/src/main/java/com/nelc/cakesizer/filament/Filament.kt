@@ -34,7 +34,7 @@ class Filament(context: Context, val surfaceView: SurfaceView) {
         .also { view ->
             view.camera = camera
             view.scene = scene
-            view.temporalAntiAliasingOptions.enabled = true
+            view.temporalAntiAliasingOptions.enabled = false
         }
 
     val assetLoader =
