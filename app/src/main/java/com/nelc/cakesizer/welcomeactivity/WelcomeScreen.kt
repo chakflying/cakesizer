@@ -61,6 +61,7 @@ import com.nelc.cakesizer.R
 import com.nelc.cakesizer.ui.NavEvents
 import com.nelc.cakesizer.ui.theme.CakeSizerTheme
 import com.nelc.cakesizer.ui.theme.Gray200
+import com.nelc.cakesizer.ui.theme.Gray800
 import com.nelc.cakesizer.ui.theme.Red500
 import com.nelc.cakesizer.ui.theme.Typography
 import com.nelc.cakesizer.ui.theme.Yellow100
@@ -212,7 +213,7 @@ fun WelcomeScreen(
                                             color = if (viewModel.selectedSize == i) {
                                                 MaterialTheme.colorScheme.onPrimary
                                             } else {
-                                                MaterialTheme.colorScheme.onSurface
+                                                Gray800
                                             },
                                         )
                                     }
