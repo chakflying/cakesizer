@@ -49,8 +49,9 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
         .also { session ->
             session.config
                 .apply {
-                    planeFindingMode = Config.PlaneFindingMode.HORIZONTAL_AND_VERTICAL
+                    planeFindingMode = Config.PlaneFindingMode.HORIZONTAL
                     focusMode = Config.FocusMode.FIXED
+                    imageStabilizationMode = Config.ImageStabilizationMode.OFF
 
                     // reading depth information is broken with latest filament
                     depthMode =
