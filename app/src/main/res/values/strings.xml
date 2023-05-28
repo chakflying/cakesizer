@@ -10,4 +10,9 @@
     <string name="camera_permission_title">Camera Permission</string>
     <string name="camera_permission_message">Camera is used for Augmented Reality</string>
     <string name="server_host">cakesizer.web.app</string>
+    <string name="hand_motion_text">Move your phone around!</string>
+    <string name="menu">menu</string>
+    <string name="toggle_shutter">Show Shutter Button</string>
+    <string name="toggle_detection">Show Detection Grid</string>
+    <string name="shutter_button">Shutter Button</string>
 </resources>

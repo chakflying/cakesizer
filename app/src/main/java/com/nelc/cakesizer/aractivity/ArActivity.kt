@@ -4,29 +4,41 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.isVisible
+import com.google.ar.core.ArCoreApk
+import com.google.ar.core.Plane
+import com.google.ar.core.TrackingState
 import com.nelc.cakesizer.*
 import com.nelc.cakesizer.arcore.ArCore
 import com.nelc.cakesizer.databinding.ArActivityBinding
 import com.nelc.cakesizer.filament.Filament
 import com.nelc.cakesizer.gesture.*
-import com.nelc.cakesizer.toRadians
-import com.nelc.cakesizer.x
-import com.nelc.cakesizer.y
 import com.nelc.cakesizer.renderer.*
-import com.google.ar.core.ArCoreApk
-import com.google.ar.core.Plane
-import com.google.ar.core.TrackingState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
+import java.io.File
+import java.io.FileOutputStream
+import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
@@ -54,6 +66,9 @@ class ArActivity : AppCompatActivity() {
     private val arTrackingEvents: MutableSharedFlow<Unit> =
         MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
+    private val shutterEvents: MutableSharedFlow<Unit> =
+        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
     private val arCoreBehavior: MutableStateFlow<Pair<ArCore, FrameCallback>?> =
         MutableStateFlow(null)
 
@@ -73,9 +88,12 @@ class ArActivity : AppCompatActivity() {
 
         modelPath = extras?.getString("modelPath")
 
+
         binding = ArActivityBinding.inflate(layoutInflater)
+        configButtons(binding.root)
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             findViewById<View>(android.R.id.content)!!.windowInsetsController!!
@@ -331,7 +349,8 @@ class ArActivity : AppCompatActivity() {
             try {
                 val lightRenderer = LightRenderer(this@ArActivity, arCore.filament)
                 val planeRenderer = PlaneRenderer(this@ArActivity, arCore.filament)
-                val modelRenderer = ModelRenderer(this@ArActivity, arCore, arCore.filament, modelPath)
+                val modelRenderer =
+                    ModelRenderer(this@ArActivity, arCore, arCore.filament, modelPath)
 
                 try {
                     val frameCallback =
@@ -422,6 +441,17 @@ class ArActivity : AppCompatActivity() {
                     job.cancel()
                     binding.handMotionContainer.isVisible = false
                 }
+
+                shutterEvents.map {
+                    captureScreenshot {
+                        Timber.e("Failed to capture photo: $it")
+                        Toast.makeText(
+                            this@ArActivity,
+                            "Failed to capture photo: $it",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }.launchIn(startScope)
             }
 
             awaitCancellation()
@@ -450,6 +480,113 @@ class ArActivity : AppCompatActivity() {
 
                 continuation.invokeOnCancellation { alertDialog.dismiss() }
             }
+        }
+    }
+
+    private fun configButtons(view: View) {
+        view.findViewById<AppCompatImageButton>(R.id.menuButton).setOnClickListener {
+            showPopup(it)
+        }
+
+        view.findViewById<AppCompatImageButton>(R.id.shutterButton).setOnClickListener {
+            takePhoto()
+        }
+    }
+
+    private fun takePhoto() {
+        shutterEvents.tryEmit(Unit)
+    }
+
+    private fun captureScreenshot(errorCallback: (Int) -> Unit) {
+        Timber.i("Trying to capture screenshot...")
+        val view = findViewById<SurfaceView>(R.id.surface_view)
+
+        // Create a bitmap to store the captured screenshot
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+
+        val captureEvent: MutableSharedFlow<Result<Unit>> =
+            MutableSharedFlow(
+                extraBufferCapacity = 1,
+                onBufferOverflow = BufferOverflow.DROP_OLDEST
+            )
+
+        // Set up the PixelCopy request
+        PixelCopy.request(
+            view, bitmap,
+            { copyResult ->
+                if (copyResult == PixelCopy.SUCCESS) {
+                    // Save the captured bitmap to a file
+                    saveBitmapToFile(bitmap, captureEvent)
+                } else {
+                    errorCallback(copyResult)
+                }
+            }, Handler(Looper.getMainLooper())
+        )
+
+        startScope.launch {
+            captureEvent.first {
+                if (it.isSuccess) {
+                    Toast.makeText(this@ArActivity, "Photo saved to gallery", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    Toast.makeText(
+                        this@ArActivity,
+                        "Failed to save photo: ${it.exceptionOrNull()?.message ?: "Unknown Error"}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                true
+            }
+        }
+    }
+
+    private fun saveBitmapToFile(bitmap: Bitmap, captureEvent: MutableSharedFlow<Result<Unit>>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val localDateTime = Clock.System.now()
+                    .toLocalDateTime(TimeZone.currentSystemDefault())
+                    .toJavaLocalDateTime()
+
+                val formattedDateTime =
+                    localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss"))
+
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).resolve("cakesizer").mkdirs()
+
+                val file = File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).resolve("cakesizer"),
+                    "cakesizer-${formattedDateTime}.png",
+                )
+
+                withContext(Dispatchers.IO) {
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, FileOutputStream(file))
+                }
+
+                captureEvent.tryEmit(Result.success(Unit))
+
+            } catch (e: Exception) {
+                Timber.e(e)
+                captureEvent.tryEmit(Result.failure(e))
+            }
+        }
+    }
+
+
+    private fun showPopup(view: View) {
+        PopupMenu(this, view).apply {
+            setOnMenuItemClickListener { item ->
+                Timber.i(item.itemId.toString())
+                when (item.itemId) {
+                    R.id.toggle_detection_switch, R.id.toggle_shutter_switch -> {
+                        item.isChecked = !item.isChecked
+                        false
+                    }
+
+                    else -> super.onOptionsItemSelected(item)
+                }
+            }
+            inflate(R.menu.ar_overflow_menu)
+            show()
         }
     }
 }
