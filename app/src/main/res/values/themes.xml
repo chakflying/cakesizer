@@ -50,7 +50,7 @@
         </item>
     </style>
 
-    <style name="Theme.App.Fullscreen">
+    <style name="Theme.App.Fullscreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
