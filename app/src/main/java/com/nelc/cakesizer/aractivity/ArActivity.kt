@@ -412,11 +412,11 @@ class ArActivity : AppCompatActivity() {
                                 .collect { modelRenderer.modelEvents.tryEmit(it) }
                         }
 
-                        launch {
-                            scaleEvents
-                                .map { ModelRenderer.ModelEvent.Update(0f, it) }
-                                .collect { modelRenderer.modelEvents.tryEmit(it) }
-                        }
+//                        launch {
+//                            scaleEvents
+//                                .map { ModelRenderer.ModelEvent.Update(0f, it) }
+//                                .collect { modelRenderer.modelEvents.tryEmit(it) }
+//                        }
 
                         launch {
                             rotateEvents
