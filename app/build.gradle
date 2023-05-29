@@ -71,6 +71,9 @@ dependencies {
 
     implementation 'androidx.palette:palette-ktx:1.0.0'
 
+    // Splash Screen Compat
+    implementation 'androidx.core:core-splashscreen:1.0.1'
+
     api 'androidx.savedstate:savedstate:1.2.1'
 
     api 'androidx.autofill:autofill:1.1.0'
