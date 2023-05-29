@@ -78,6 +78,8 @@ class ArActivity : AppCompatActivity() {
     private lateinit var startScope: CoroutineScope
     private lateinit var binding: ArActivityBinding
 
+    private lateinit var popupMenu: PopupMenu
+
     private var modelPath: String? = null
 
     @SuppressLint("ClickableViewAccessibility")
@@ -93,6 +95,25 @@ class ArActivity : AppCompatActivity() {
         configButtons(binding.root)
         setContentView(binding.root)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Build Popup
+        popupMenu = PopupMenu(
+            this,
+            binding.root.findViewById<AppCompatImageButton>(R.id.menuButton)
+        ).apply {
+            setOnMenuItemClickListener { item ->
+                Timber.i(item.itemId.toString())
+                when (item.itemId) {
+                    R.id.toggle_detection_switch, R.id.toggle_shutter_switch -> {
+                        item.isChecked = !item.isChecked
+                        false
+                    }
+
+                    else -> super.onOptionsItemSelected(item)
+                }
+            }
+            inflate(R.menu.ar_overflow_menu)
+        }
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -485,7 +506,7 @@ class ArActivity : AppCompatActivity() {
 
     private fun configButtons(view: View) {
         view.findViewById<AppCompatImageButton>(R.id.menuButton).setOnClickListener {
-            showPopup(it)
+            showPopup()
         }
 
         view.findViewById<AppCompatImageButton>(R.id.shutterButton).setOnClickListener {
@@ -551,10 +572,12 @@ class ArActivity : AppCompatActivity() {
                 val formattedDateTime =
                     localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd-HHmmss"))
 
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).resolve("cakesizer").mkdirs()
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .resolve("cakesizer").mkdirs()
 
                 val file = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).resolve("cakesizer"),
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                        .resolve("cakesizer"),
                     "cakesizer-${formattedDateTime}.png",
                 )
 
@@ -572,21 +595,7 @@ class ArActivity : AppCompatActivity() {
     }
 
 
-    private fun showPopup(view: View) {
-        PopupMenu(this, view).apply {
-            setOnMenuItemClickListener { item ->
-                Timber.i(item.itemId.toString())
-                when (item.itemId) {
-                    R.id.toggle_detection_switch, R.id.toggle_shutter_switch -> {
-                        item.isChecked = !item.isChecked
-                        false
-                    }
-
-                    else -> super.onOptionsItemSelected(item)
-                }
-            }
-            inflate(R.menu.ar_overflow_menu)
-            show()
-        }
+    private fun showPopup() {
+        popupMenu.show()
     }
 }
