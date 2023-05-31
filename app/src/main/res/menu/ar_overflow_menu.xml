@@ -4,10 +4,12 @@
     <item
         android:id="@+id/toggle_shutter_switch"
         android:checkable="true"
+        android:checked="true"
         android:title="@string/toggle_shutter" />
 
     <item
         android:id="@+id/toggle_detection_switch"
         android:checkable="true"
+        android:checked="true"
         android:title="@string/toggle_detection" />
 </menu>

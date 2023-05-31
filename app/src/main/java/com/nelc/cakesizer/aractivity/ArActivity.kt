@@ -11,6 +11,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -69,6 +70,9 @@ class ArActivity : AppCompatActivity() {
     private val shutterEvents: MutableSharedFlow<Unit> =
         MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
+    private val drawPlaneEvents: MutableSharedFlow<Boolean> =
+        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
     private val arCoreBehavior: MutableStateFlow<Pair<ArCore, FrameCallback>?> =
         MutableStateFlow(null)
 
@@ -79,6 +83,8 @@ class ArActivity : AppCompatActivity() {
     private lateinit var binding: ArActivityBinding
 
     private lateinit var popupMenu: PopupMenu
+    private var showShutterButton: Boolean = true
+    private var showDetectionGrid: Boolean = true
 
     private var modelPath: String? = null
 
@@ -104,9 +110,19 @@ class ArActivity : AppCompatActivity() {
             setOnMenuItemClickListener { item ->
                 Timber.i(item.itemId.toString())
                 when (item.itemId) {
-                    R.id.toggle_detection_switch, R.id.toggle_shutter_switch -> {
-                        item.isChecked = !item.isChecked
-                        false
+                    R.id.toggle_detection_switch -> {
+                        showDetectionGrid = !showDetectionGrid
+                        drawPlaneEvents.tryEmit(showDetectionGrid)
+                        item.isChecked = showDetectionGrid
+                        true
+                    }
+
+                    R.id.toggle_shutter_switch -> {
+                        showShutterButton = !showShutterButton
+                        item.isChecked = showShutterButton
+                        binding.root.findViewById<FrameLayout>(R.id.camera_container).isVisible =
+                            showShutterButton
+                        true
                     }
 
                     else -> super.onOptionsItemSelected(item)
@@ -423,6 +439,12 @@ class ArActivity : AppCompatActivity() {
                                 .map { ModelRenderer.ModelEvent.Update(it, 1f) }
                                 .collect { modelRenderer.modelEvents.tryEmit(it) }
                         }
+
+                        launch {
+                            drawPlaneEvents.collect {
+                                planeRenderer.drawPlaneEvents.tryEmit(it)
+                            }
+                        }
                     }
 
                     awaitCancellation()
@@ -485,7 +507,7 @@ class ArActivity : AppCompatActivity() {
 
     private suspend fun showCameraPermissionDialog(activity: AppCompatActivity) {
         if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA)) {
-            suspendCancellableCoroutine<Unit> { continuation ->
+            suspendCancellableCoroutine { continuation ->
                 val alertDialog = AlertDialog
                     .Builder(activity)
                     .setTitle(R.string.camera_permission_title)
