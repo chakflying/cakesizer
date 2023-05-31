@@ -10,6 +10,11 @@ import com.google.android.filament.utils.loadTexture
 import com.google.ar.core.Frame
 import com.google.ar.core.Plane
 import com.google.ar.core.TrackingState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
@@ -22,6 +27,14 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
         private const val planeVertexBufferSize: Int = 1000
         private const val planeIndexBufferSize: Int = (planeVertexBufferSize - 2) * 3
     }
+
+    private var drawPlane: Boolean = true
+
+    val drawPlaneEvents: MutableSharedFlow<Boolean> =
+        MutableSharedFlow(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    private val coroutineScope: CoroutineScope =
+        CoroutineScope(Dispatchers.Main)
 
     private val textureMaterial: Material = context
         .readUncompressedAsset("materials/textured.filamat")
@@ -37,7 +50,12 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
         .also { materialInstance ->
             materialInstance.setParameter(
                 "texture",
-                loadTexture(filament.engine, context.resources, R.drawable.sceneform_plane, TextureType.COLOR),
+                loadTexture(
+                    filament.engine,
+                    context.resources,
+                    R.drawable.sceneform_plane,
+                    TextureType.COLOR
+                ),
                 TextureSampler().also { it.anisotropy = 8.0f },
             )
 
@@ -104,7 +122,24 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
     private val planeRenderable: Int =
         EntityManager.get().create().also { filament.scene.addEntity(it) }
 
+    init {
+        coroutineScope.launch {
+            launch {
+                drawPlaneEvents.collect {
+                    drawPlane = it
+                    if (!drawPlane) {
+                        filament.scene.removeEntity(planeRenderable)
+                    } else {
+                        filament.scene.addEntity(planeRenderable)
+                    }
+                }
+            }
+        }
+    }
+
     fun doFrame(frame: Frame) {
+        if (!drawPlane) return
+
         // update plane trackables
         val planeTrackables = frame
             .getUpdatedTrackables(Plane::class.java)
@@ -237,7 +272,8 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
                     (zMax - zMin) / 2f,
                 )
             )
-            .geometry( // texture is applied to all triangles
+            .geometry(
+                // texture is applied to all triangles
                 0,
                 RenderableManager.PrimitiveType.TRIANGLES,
                 planeVertexBuffer,
@@ -246,7 +282,8 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
                 indexBufferOffset,
             )
             .material(0, textureMaterialInstance)
-            .geometry( // shadows are applied to upward facing triangles
+            .geometry(
+                // shadows are applied to upward facing triangles
                 1,
                 RenderableManager.PrimitiveType.TRIANGLES,
                 planeVertexBuffer,
