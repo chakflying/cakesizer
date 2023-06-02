@@ -1,11 +1,14 @@
 package com.nelc.cakesizer.welcomeactivity
 
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -29,8 +32,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,8 +55,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.graphics.drawable.toBitmap
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -90,6 +99,8 @@ fun WelcomeScreen(
 
     val sizeScrollState = rememberScrollState()
     val designScrollState = rememberScrollState()
+
+    var showCredits by remember { mutableStateOf(false) }
 
     LaunchedEffect(navEvents) {
         viewModel.navEvents = navEvents
@@ -148,7 +159,7 @@ fun WelcomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp, vertical = 32.dp),
+                .padding(horizontal = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -177,7 +188,7 @@ fun WelcomeScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 12.dp),
-                        text = "直徑",
+                        text = stringResource(R.string.diameter),
                         style = Typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -208,7 +219,7 @@ fun WelcomeScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = "$i\" 吋",
+                                            text = stringResource(R.string.num_inch, i),
                                             style = Typography.displaySmall,
                                             color = if (viewModel.selectedSize == i) {
                                                 MaterialTheme.colorScheme.onPrimary
@@ -242,7 +253,7 @@ fun WelcomeScreen(
 
                     Text(
                         modifier = Modifier.padding(top = 12.dp),
-                        text = "設計",
+                        text = stringResource(R.string.design),
                         style = Typography.headlineSmall,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
@@ -320,7 +331,47 @@ fun WelcomeScreen(
                         viewModel.start()
                     }
                 }) {
-                Text(text = "開始", style = Typography.displaySmall)
+                Text(
+                    text = stringResource(R.string.start),
+                    style = Typography.displaySmall
+                )
+            }
+
+            Text(
+                modifier = Modifier
+                    .padding(6.dp)
+                    .clickable {
+                        showCredits = true
+                    },
+                text = stringResource(R.string.credits),
+                style = MaterialTheme.typography.bodySmall,
+                textDecoration = TextDecoration.Underline
+            )
+        }
+
+        if (showCredits) {
+            Dialog(
+                onDismissRequest = {
+                    showCredits = false
+                },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                AnimatedVisibility(
+                    visible = showCredits,
+                    enter = slideInVertically { fullHeight ->
+                        fullHeight * 2
+                    },
+                    exit = slideOutVertically { fullHeight ->
+                        fullHeight * 2
+                    }
+                ) {
+                    CreditsScreen(
+                        modifier = Modifier.padding(32.dp),
+                        onClose = {
+                            showCredits = false
+                        }
+                    )
+                }
             }
         }
     }
@@ -345,7 +396,7 @@ fun WelcomeScreen(
                     strokeWidth = 8.dp,
                 )
                 Text(
-                    "下載模型中...",
+                    text = stringResource(R.string.downloading_model),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }
