@@ -15,4 +15,9 @@
     <string name="design">設計</string>
     <string name="start">開始</string>
     <string name="downloading_model">下載模型中…</string>
+    <string name="settings">設定</string>
+    <string name="language">語言</string>
+    <string name="quality">畫質</string>
+    <string name="high">高</string>
+    <string name="medium">中</string>
 </resources>

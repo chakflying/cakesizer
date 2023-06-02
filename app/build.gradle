@@ -18,6 +18,7 @@ android {
         targetSdkVersion 33
         versionCode 1
         versionName '1.0.0'
+        resourceConfigurations += ["en", "b+zh+HK"]
     }
     buildTypes {
         debug {
@@ -117,6 +118,7 @@ dependencies {
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation 'androidx.compose.material3:material3:1.1.0'
+    implementation 'androidx.compose.material:material-icons-extended:1.4.3'
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
@@ -180,6 +182,9 @@ dependencies {
 
     // Datetime
     implementation 'org.jetbrains.kotlinx:kotlinx-datetime:0.4.0'
+
+    // Datastore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KaptGenerateStubs).configureEach {

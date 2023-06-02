@@ -25,8 +25,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -73,7 +77,7 @@ import com.nelc.cakesizer.ui.theme.Gray200
 import com.nelc.cakesizer.ui.theme.Gray800
 import com.nelc.cakesizer.ui.theme.Red500
 import com.nelc.cakesizer.ui.theme.Typography
-import com.nelc.cakesizer.ui.theme.Yellow100
+import com.nelc.cakesizer.ui.theme.Yellow200
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
@@ -97,10 +101,12 @@ fun WelcomeScreen(
         Animatable(0F)
     }
 
+    val screenScrollState = rememberScrollState()
     val sizeScrollState = rememberScrollState()
     val designScrollState = rememberScrollState()
 
     var showCredits by remember { mutableStateOf(false) }
+    var showSettings by remember { mutableStateOf(false) }
 
     LaunchedEffect(navEvents) {
         viewModel.navEvents = navEvents
@@ -159,7 +165,8 @@ fun WelcomeScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 32.dp)
+                .verticalScroll(screenScrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -183,7 +190,7 @@ fun WelcomeScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 12.dp),
+                        .padding(vertical = 12.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
@@ -204,7 +211,7 @@ fun WelcomeScreen(
                                     color = if (viewModel.selectedSize == i) {
                                         MaterialTheme.colorScheme.primary
                                     } else {
-                                        Yellow100
+                                        Yellow200
                                     },
                                     shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier
@@ -234,7 +241,7 @@ fun WelcomeScreen(
                             // Placeholder
                             (0..2).forEach { _ ->
                                 Surface(
-                                    color = Yellow100,
+                                    color = Yellow200,
                                     shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier
                                         .height(96.dp)
@@ -269,7 +276,7 @@ fun WelcomeScreen(
                                     color = if (viewModel.selectedCake == cake) {
                                         MaterialTheme.colorScheme.primary
                                     } else {
-                                        Yellow100
+                                        Yellow200
                                     },
                                     shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier
@@ -302,7 +309,7 @@ fun WelcomeScreen(
                             // Placeholder
                             (0..2).forEach { _ ->
                                 Surface(
-                                    color = Yellow100,
+                                    color = Yellow200,
                                     shape = RoundedCornerShape(12.dp),
                                     modifier = Modifier
                                         .height(96.dp)
@@ -337,16 +344,52 @@ fun WelcomeScreen(
                 )
             }
 
-            Text(
+            Surface(
                 modifier = Modifier
-                    .padding(6.dp)
-                    .clickable {
-                        showCredits = true
-                    },
-                text = stringResource(R.string.credits),
-                style = MaterialTheme.typography.bodySmall,
-                textDecoration = TextDecoration.Underline
-            )
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp),
+                color = MaterialTheme.colorScheme.background.copy(alpha = 0.0f),
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Row(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(
+                        12.dp,
+                        Alignment.CenterHorizontally
+                    ),
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .clickable {
+                                showSettings = true
+                            }
+                            .padding(6.dp),
+                        text = stringResource(R.string.settings),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textDecoration = TextDecoration.Underline
+                    )
+                    Icon(
+                        Icons.Rounded.Adjust,
+                        contentDescription = "Separator",
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
+                    )
+                    Text(
+                        modifier = Modifier
+                            .clickable {
+                                showCredits = true
+                            }
+                            .padding(6.dp),
+                        text = stringResource(R.string.credits),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
+            }
+
+
         }
 
         if (showCredits) {
@@ -369,6 +412,32 @@ fun WelcomeScreen(
                         modifier = Modifier.padding(32.dp),
                         onClose = {
                             showCredits = false
+                        }
+                    )
+                }
+            }
+        }
+
+        if (showSettings) {
+            Dialog(
+                onDismissRequest = {
+                    showSettings = false
+                },
+                properties = DialogProperties(usePlatformDefaultWidth = false)
+            ) {
+                AnimatedVisibility(
+                    visible = showSettings,
+                    enter = slideInVertically { fullHeight ->
+                        fullHeight * 2
+                    },
+                    exit = slideOutVertically { fullHeight ->
+                        fullHeight * 2
+                    }
+                ) {
+                    SettingsScreen(
+                        modifier = Modifier.padding(32.dp),
+                        onClose = {
+                            showSettings = false
                         }
                     )
                 }
@@ -397,7 +466,8 @@ fun WelcomeScreen(
                 )
                 Text(
                     text = stringResource(R.string.downloading_model),
-                    style = MaterialTheme.typography.headlineSmall
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }

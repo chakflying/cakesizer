@@ -28,7 +28,6 @@ fun CreditsScreen(
     modifier: Modifier = Modifier,
     onClose: () -> Unit = {},
 ) {
-
     Surface(
         modifier = modifier
             .fillMaxSize()
