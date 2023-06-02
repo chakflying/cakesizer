@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="opengl_required_title">OpenGL 錯誤</string>
+    <string name="opengl_required_message">系統需要支援 OpenGL ES %1$s 或更新版本</string>
+    <string name="camera_permission_title">使用相機權限</string>
+    <string name="camera_permission_message">相機用作顯示AR畫面</string>
+    <string name="hand_motion_text">慢慢移動你的相機!</string>
+    <string name="menu">目錄</string>
+    <string name="toggle_shutter">顯示相機快門</string>
+    <string name="toggle_detection">顯示平面偵測</string>
+    <string name="shutter_button">相機快門</string>
+    <string name="credits">版權資訊</string>
+    <string name="diameter">直徑</string>
+    <string name="num_inch">%1$d\" 吋</string>
+    <string name="design">設計</string>
+    <string name="start">開始</string>
+    <string name="downloading_model">下載模型中…</string>
+</resources>

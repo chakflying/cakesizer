@@ -9,10 +9,16 @@
     <!-- camera permission dialog -->
     <string name="camera_permission_title">Camera Permission</string>
     <string name="camera_permission_message">Camera is used for Augmented Reality</string>
-    <string name="server_host">cakesizer.web.app</string>
+    <string name="server_host" translatable="false">cakesizer.web.app</string>
     <string name="hand_motion_text">Move your phone around!</string>
     <string name="menu">menu</string>
     <string name="toggle_shutter">Show Shutter Button</string>
     <string name="toggle_detection">Show Detection Grid</string>
     <string name="shutter_button">Shutter Button</string>
+    <string name="credits">Credits</string>
+    <string name="diameter">Diameter</string>
+    <string name="num_inch">%1$d\"</string>
+    <string name="design">Design</string>
+    <string name="start">Start</string>
+    <string name="downloading_model">Downloading Model…</string>
 </resources>
