@@ -77,7 +77,7 @@ class CakesServiceImpl @Inject constructor(
                     }
                     method = HttpMethod.Get
                     contentType(ContentType.Application.Any)
-                    onDownload { bytesSentTotal, contentLength ->
+                    onDownload { bytesSentTotal, _ ->
                         progress.value = bytesSentTotal
                     }
                 }
