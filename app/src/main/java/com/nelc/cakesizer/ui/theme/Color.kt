@@ -18,6 +18,8 @@ val Yellow400 = Color(0xFFFBC932)
 val Yellow500 = Color(0xFFD4A027)
 val Yellow600 = Color(0xFFBE6B05)
 val Yellow700 = Color(0xFF884905)
+val Yellow800 = Color(0xFF6B3A04)
+val Yellow900 = Color(0xFF3D2305)
 
 val Red100 = Color(0xFFFFE3DC)
 val Red200 = Color(0xFFFDBDAF)
