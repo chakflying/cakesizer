@@ -4,14 +4,21 @@ import android.content.Context
 import android.opengl.EGLContext
 import android.view.Surface
 import android.view.SurfaceView
-import com.nelc.cakesizer.createEglContext
-import com.nelc.cakesizer.destroyEglContext
-import com.google.android.filament.*
+import com.google.android.filament.Camera
+import com.google.android.filament.Engine
+import com.google.android.filament.EntityManager
+import com.google.android.filament.Renderer
+import com.google.android.filament.Scene
+import com.google.android.filament.SwapChain
+import com.google.android.filament.View
+import com.google.android.filament.Viewport
 import com.google.android.filament.android.DisplayHelper
 import com.google.android.filament.android.UiHelper
 import com.google.android.filament.gltfio.AssetLoader
 import com.google.android.filament.gltfio.ResourceLoader
 import com.google.android.filament.gltfio.UbershaderProvider
+import com.nelc.cakesizer.createEglContext
+import com.nelc.cakesizer.destroyEglContext
 
 class Filament(context: Context, val surfaceView: SurfaceView) {
     var timestamp: Long = 0L
