@@ -53,7 +53,7 @@ class ModelRenderer(
                 withContext(Dispatchers.IO) {
                     if (modelPath == null) {
                         context.assets
-                            .open("simple-cake-01.glb")
+                            .open("eren-hiphop-dance.glb")
                             .use { input ->
                                 val bytes = ByteArray(input.available())
                                 input.read(bytes)
