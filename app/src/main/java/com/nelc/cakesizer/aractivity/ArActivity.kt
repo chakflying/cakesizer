@@ -25,6 +25,7 @@ import com.google.ar.core.Plane
 import com.google.ar.core.TrackingState
 import com.nelc.cakesizer.*
 import com.nelc.cakesizer.arcore.ArCore
+import com.nelc.cakesizer.data.SettingsStore
 import com.nelc.cakesizer.databinding.ArActivityBinding
 import com.nelc.cakesizer.filament.Filament
 import com.nelc.cakesizer.gesture.*
@@ -87,6 +88,8 @@ class ArActivity : AppCompatActivity() {
     private var showDetectionGrid: Boolean = true
 
     private var modelPath: String? = null
+
+    private var settingsStore = SettingsStore(this)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -377,9 +380,16 @@ class ArActivity : AppCompatActivity() {
             }
         }
 
-        // TODO: eliminate nesting of finally blocks
         val filament = Filament(this@ArActivity, binding.surfaceView)
 
+        // Set settings
+        createScope.launch {
+            settingsStore.qualityFlow.collect {
+                filament.view.temporalAntiAliasingOptions.enabled = it == 0
+            }
+        }
+
+        // TODO: eliminate nesting of finally blocks
         try {
             val arCore = ArCore(this@ArActivity, filament, binding.surfaceView)
 
