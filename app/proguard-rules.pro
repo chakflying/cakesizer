@@ -24,3 +24,9 @@
 
 # Filament
 -keep class com.google.android.filament.** { *; }
+
+# serialization
+-dontwarn j$.util.function.Consumer$-CC
+-dontwarn kotlinx.serialization.KSerializer
+-dontwarn kotlinx.serialization.Serializable
+
