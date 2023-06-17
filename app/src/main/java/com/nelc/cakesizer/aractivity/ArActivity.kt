@@ -89,7 +89,7 @@ class ArActivity : AppCompatActivity() {
 
     private var modelPath: String? = null
 
-    private var settingsStore = SettingsStore(this.applicationContext)
+    private lateinit var settingsStore: SettingsStore
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,6 +99,7 @@ class ArActivity : AppCompatActivity() {
 
         modelPath = extras?.getString("modelPath")
 
+        settingsStore = SettingsStore(this.applicationContext)
 
         binding = ArActivityBinding.inflate(layoutInflater)
         configButtons(binding.root)
