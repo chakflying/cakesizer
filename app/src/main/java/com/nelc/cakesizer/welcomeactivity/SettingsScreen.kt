@@ -18,7 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -33,7 +32,6 @@ import com.nelc.cakesizer.R
 import com.nelc.cakesizer.data.SettingsStore
 import com.nelc.cakesizer.ui.theme.CakeSizerTheme
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun SettingsScreen(
@@ -44,12 +42,8 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
     val settingsStore = SettingsStore(context)
 
-    val language = settingsStore.languageFlow.collectAsState(initial = "en")
+    val language = settingsStore.languageFlow.collectAsState(initial = "")
     val quality = settingsStore.qualityFlow.collectAsState(initial = 0)
-
-    LaunchedEffect(language.value) {
-        Timber.i("Stored language is $language")
-    }
 
     Surface(
         modifier = modifier
@@ -115,7 +109,6 @@ fun SettingsScreen(
                                 scope.launch {
                                     settingsStore.setLanguage("zh")
                                 }
-                                setAppLanguage("zh")
                             }
                             .padding(24.dp),
                         text = "繁",
@@ -132,7 +125,6 @@ fun SettingsScreen(
                                 scope.launch {
                                     settingsStore.setLanguage("en")
                                 }
-                                setAppLanguage("en")
                             }
                             .padding(24.dp),
                         text = "Eng",
