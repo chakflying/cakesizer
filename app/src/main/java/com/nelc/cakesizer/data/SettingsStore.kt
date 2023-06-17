@@ -20,11 +20,20 @@ class SettingsStore(private val context: Context) {
     private val KEY_QUALITY = intPreferencesKey("quality")
 
     val languageFlow: Flow<String> = context.dataStore.data.map { preferences ->
-        preferences[KEY_LANGUAGE] ?: Locale.getDefault().language
+        preferences[KEY_LANGUAGE] ?: detectLanguage()
     }
 
     val qualityFlow: Flow<Int> = context.dataStore.data.map { preferences ->
         preferences[KEY_QUALITY] ?: 0
+    }
+
+    private fun detectLanguage(): String {
+        val locale = Locale.getDefault().language
+        return if (locale.contains("zh")) {
+            "zh"
+        } else {
+            "en"
+        }
     }
 
     suspend fun setLanguage(language: String) {

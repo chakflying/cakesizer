@@ -36,6 +36,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -71,6 +72,7 @@ import com.google.accompanist.placeholder.PlaceholderHighlight
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.placeholder.shimmer
 import com.nelc.cakesizer.R
+import com.nelc.cakesizer.data.SettingsStore
 import com.nelc.cakesizer.ui.NavEvents
 import com.nelc.cakesizer.ui.theme.CakeSizerTheme
 import com.nelc.cakesizer.ui.theme.Gray200
@@ -107,6 +109,13 @@ fun WelcomeScreen(
 
     var showCredits by remember { mutableStateOf(false) }
     var showSettings by remember { mutableStateOf(false) }
+
+    val settingsStore = SettingsStore(context)
+    val language = settingsStore.languageFlow.collectAsState(initial = "")
+
+    LaunchedEffect(language.value) {
+        setAppLanguage(language.value)
+    }
 
     LaunchedEffect(navEvents) {
         viewModel.navEvents = navEvents
