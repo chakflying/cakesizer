@@ -89,7 +89,7 @@ class ArActivity : AppCompatActivity() {
 
     private var modelPath: String? = null
 
-    private var settingsStore = SettingsStore(this)
+    private var settingsStore = SettingsStore(this.applicationContext)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
