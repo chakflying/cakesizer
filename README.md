@@ -1,6 +1,6 @@
 # Cakesizer
 
-This project an app for visualizing cakes using ArCore and Filament.
+This project an Android app visualizing cakes using ArCore and Filament.
 
 ## Attribution
 
