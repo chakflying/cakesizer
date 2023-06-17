@@ -25,6 +25,7 @@ import com.google.ar.core.Plane
 import com.google.ar.core.TrackingState
 import com.nelc.cakesizer.*
 import com.nelc.cakesizer.arcore.ArCore
+import com.nelc.cakesizer.arcore.ShutterAnimation
 import com.nelc.cakesizer.data.SettingsStore
 import com.nelc.cakesizer.databinding.ArActivityBinding
 import com.nelc.cakesizer.filament.Filament
@@ -109,7 +110,7 @@ class ArActivity : AppCompatActivity() {
         // Build Popup
         popupMenu = PopupMenu(
             this,
-            binding.root.findViewById<AppCompatImageButton>(R.id.menuButton)
+            binding.root.findViewById<AppCompatImageButton>(R.id.menu_button)
         ).apply {
             setOnMenuItemClickListener { item ->
                 Timber.i(item.itemId.toString())
@@ -538,17 +539,21 @@ class ArActivity : AppCompatActivity() {
     }
 
     private fun configButtons(view: View) {
-        view.findViewById<AppCompatImageButton>(R.id.menuButton).setOnClickListener {
+        view.findViewById<AppCompatImageButton>(R.id.menu_button).setOnClickListener {
             showPopup()
         }
 
-        view.findViewById<AppCompatImageButton>(R.id.shutterButton).setOnClickListener {
+        view.findViewById<AppCompatImageButton>(R.id.shutter_button).setOnClickListener {
             takePhoto()
         }
     }
 
     private fun takePhoto() {
         shutterEvents.tryEmit(Unit)
+
+        val shutterFlashView = binding.root.findViewById<View>(R.id.shutter_flash)
+        shutterFlashView.clearAnimation()
+        shutterFlashView.startAnimation(ShutterAnimation(shutterFlashView))
     }
 
     private fun captureScreenshot(errorCallback: (Int) -> Unit) {

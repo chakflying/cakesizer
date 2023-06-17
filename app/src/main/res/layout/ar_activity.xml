@@ -30,7 +30,7 @@
             android:src="@drawable/sceneform_hand_phone" />
 
         <TextView
-            android:id="@+id/HandMotionText"
+            android:id="@+id/hand_motion_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|center_vertical"
@@ -52,7 +52,7 @@
         android:visibility="visible">
 
         <ImageButton
-            android:id="@+id/menuButton"
+            android:id="@+id/menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
@@ -72,7 +72,7 @@
         android:visibility="visible">
 
         <ImageButton
-            android:id="@+id/shutterButton"
+            android:id="@+id/shutter_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -83,5 +83,12 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             app:srcCompat="@drawable/shutter_button" />
+
+        <View
+            android:id="@+id/shutter_flash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0"
+            android:background="#FDFDFD" />
     </FrameLayout>
 </FrameLayout>
