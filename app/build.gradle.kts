@@ -65,7 +65,7 @@ android {
     }
 
     kapt {
-        useBuildCache = false
+        // useBuildCache = false
     }
 
     composeOptions {
@@ -115,7 +115,7 @@ dependencies {
 
     implementation(libs.work.runtime.ktx)
 
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(libs.constraintlayout)
 
     implementation(libs.activity.ktx)
     implementation(libs.activity.compose)
