@@ -6,26 +6,26 @@ androidxArchCore = "2.2.0"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxActivity = "1.7.2"
-androidxCompose = "1.4.3"
-androidxCoroutines = "1.7.1"
+androidxComposeBom = "2023.09.00"
+androidxCoroutines = "1.7.2"
 androidxDatastorePreferences = "1.0.0"
 androidxFragment = "1.6.1"
-androidxLifecycle = "2.6.1"
-androidxNavigation = "2.6.0"
+androidxLifecycle = "2.6.2"
+androidxNavigation = "2.7.2"
 androidxPreference = "1.2.1"
 androidxSavedstate = "1.2.1"
 androidxWorkManager = "2.8.1"
 appcompat = "1.6.1"
 arcore = "1.39.0"
 coil = "2.4.0"
-material3 = "1.1.1"
 constraintlayout = "2.1.4"
 filament = "1.42.1"
-hilt = "2.44"
+hilt = "2.48"
 hiltCore = "1.0.0"
-kotlin = "1.8.21"
+kotlin = "1.9.10"
 kotlinxDatetime = "0.4.1"
 googleServices = "4.3.15"
+firebaseBom = "32.3.1"
 firebase = "2.9.9"
 arrow = "1.2.0"
 slf4jTimber = "1.0.1"
@@ -34,6 +34,7 @@ ktor = "2.3.0"
 toml4j = "0.7.2"
 
 [libraries]
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompanist" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
@@ -54,6 +55,7 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "andro
 gltfio-android = { module = "com.google.android.filament:gltfio-android", version.ref = "filament" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
+hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCore" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "androidxCoroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "androidxCoroutines" }
@@ -75,13 +77,14 @@ navigation-testing = { module = "androidx.navigation:navigation-testing", versio
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigation" }
 preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidxPreference" }
 savedstate-ktx = { module = "androidx.savedstate:savedstate-ktx", version.ref = "androidxSavedstate" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "androidxCompose" }
-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "androidxCompose" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "androidxCompose" }
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "androidxCompose" }
-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "androidxCompose" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "androidxCompose" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 slf4j-timber = { module = "at.favre.lib:slf4j-timber", version.ref = "slf4jTimber" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 toml4j = { module = "com.moandjiezana.toml:toml4j", version.ref = "toml4j" }
@@ -92,6 +95,9 @@ ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

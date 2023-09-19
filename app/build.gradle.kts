@@ -66,10 +66,15 @@ android {
 
     kapt {
         // useBuildCache = false
+        correctErrorTypes = true
+    }
+
+    hilt {
+        enableAggregatingTask = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.7"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
 
     buildFeatures {
@@ -123,17 +128,23 @@ dependencies {
     implementation(libs.fragment.ktx)
 
     // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    val firebaseBom = platform(libs.firebase.bom)
+    implementation(firebaseBom)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     // Compose
-    implementation(libs.compose.ui)
-    implementation(libs.compose.ui.tooling.preview)
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.core)
     implementation(libs.compose.material.icons.extended)
-    androidTestImplementation(libs.compose.ui.test.junit4)
+    // Android Studio Preview support
     debugImplementation(libs.compose.ui.tooling)
+    implementation(libs.compose.ui.tooling.preview)
+    // UI Tests
+    androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
 
     // Hilt
