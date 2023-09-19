@@ -1,6 +1,10 @@
 # Cakesizer
 
-This project an Android app visualizing cakes using ArCore and Filament.
+An Android app visualizing cakes using AR.
+
+- Google [ARCore](https://developers.google.com/ar)
+- [Filament](https://github.com/google/filament) Rendering Engine
+- Jetpack Compose UI
 
 ## Attribution
 
