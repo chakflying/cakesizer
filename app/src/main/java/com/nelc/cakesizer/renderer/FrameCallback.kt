@@ -3,6 +3,7 @@ package com.nelc.cakesizer.renderer
 import android.view.Choreographer
 import com.nelc.cakesizer.arcore.ArCore
 import com.google.ar.core.Frame
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class FrameCallback(
@@ -36,28 +37,32 @@ class FrameCallback(
 
         lastTick = tick
 
-        // render using frame from last tick to reduce possibility of jitter but increases latency
-        if (// only render if we have an ar frame
-            arCore.timestamp != 0L &&
-            arCore.filament.uiHelper.isReadyToRender &&
-            // This means you are sending frames too quickly to the GPU
-            arCore.filament.renderer.beginFrame(arCore.filament.swapChain!!, frameTimeNanos)
-        ) {
-            arCore.filament.timestamp = arCore.timestamp
-            arCore.filament.renderer.render(arCore.filament.view)
-            arCore.filament.renderer.endFrame()
-        }
+        try {
+            // render using frame from last tick to reduce possibility of jitter but increases latency
+            if (// only render if we have an ar frame
+                arCore.timestamp != 0L &&
+                arCore.filament.uiHelper.isReadyToRender &&
+                // This means you are sending frames too quickly to the GPU
+                arCore.filament.renderer.beginFrame(arCore.filament.swapChain!!, frameTimeNanos)
+            ) {
+                arCore.filament.timestamp = arCore.timestamp
+                arCore.filament.renderer.render(arCore.filament.view)
+                arCore.filament.renderer.endFrame()
+            }
 
-        val frame = arCore.session.update()
+            val frame = arCore.session.update()
 
-        // During startup the camera system may not produce actual images immediately. In
-        // this common case, a frame with timestamp = 0 will be returned.
-        if (frame.timestamp != 0L &&
-            frame.timestamp != arCore.timestamp
-        ) {
-            arCore.timestamp = frame.timestamp
-            arCore.update(frame, arCore.filament)
-            doFrame(frame)
+            // During startup the camera system may not produce actual images immediately. In
+            // this common case, a frame with timestamp = 0 will be returned.
+            if (frame.timestamp != 0L &&
+                frame.timestamp != arCore.timestamp
+            ) {
+                arCore.timestamp = frame.timestamp
+                arCore.update(frame, arCore.filament)
+                doFrame(frame)
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 

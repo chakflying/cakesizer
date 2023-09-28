@@ -27,7 +27,7 @@ import kotlin.math.roundToInt
 class ModelBuffers(val clipPosition: V2A, val uvs: V2A, val triangleIndices: ShortArray)
 
 @SuppressLint("MissingPermission")
-class ArCore(private val activity: Activity, val filament: Filament, private val view: View) {
+class ArCore(val activity: Activity, val filament: Filament, private val view: View) {
     companion object {
         const val near: Float = 0.01f
         const val far: Float = 30f
@@ -60,7 +60,7 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
 
                     lightEstimationMode = Config.LightEstimationMode.ENVIRONMENTAL_HDR
                     // getting ar frame doesn't block and gives last frame
-                    updateMode = Config.UpdateMode.LATEST_CAMERA_IMAGE
+                    updateMode = Config.UpdateMode.BLOCKING
                 }
                 .let(session::configure)
 
@@ -222,7 +222,6 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
             initFlat()
         }
 
-        // reading depth information is broken with latest filament
         (if (session.isDepthModeSupported(Config.DepthMode.AUTOMATIC)) Unit else null)
             ?.let {
                 if (hasDepthImage.not()) {
@@ -460,8 +459,8 @@ class ArCore(private val activity: Activity, val filament: Filament, private val
     }
 
     private fun tessellation(): ModelBuffers {
-        val tesWidth: Int = 1
-        val tesHeight: Int = 1
+        val tesWidth = 12
+        val tesHeight = 12
 
         val clipPosition: V2A = (((tesWidth * tesHeight) + tesWidth + tesHeight + 1) * dimenV2A)
             .let { FloatArray(it) }
