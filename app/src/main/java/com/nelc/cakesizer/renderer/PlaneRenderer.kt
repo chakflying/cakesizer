@@ -128,9 +128,9 @@ class PlaneRenderer(context: Context, private val filament: Filament) {
                 drawPlaneEvents.collect {
                     drawPlane = it
                     if (!drawPlane) {
-                        filament.scene.removeEntity(planeRenderable)
+                        textureMaterialInstance.setParameter("alpha", 0f)
                     } else {
-                        filament.scene.addEntity(planeRenderable)
+                        textureMaterialInstance.setParameter("alpha", 1f)
                     }
                 }
             }
