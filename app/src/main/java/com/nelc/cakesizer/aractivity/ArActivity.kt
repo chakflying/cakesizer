@@ -546,6 +546,10 @@ class ArActivity : AppCompatActivity() {
         view.findViewById<AppCompatImageButton>(R.id.shutter_button).setOnClickListener {
             takePhoto()
         }
+
+        view.findViewById<AppCompatImageButton>(R.id.back_button).setOnClickListener {
+            back()
+        }
     }
 
     private fun takePhoto() {
@@ -598,6 +602,10 @@ class ArActivity : AppCompatActivity() {
                 true
             }
         }
+    }
+
+    private fun back() {
+        onBackPressed()
     }
 
     private fun saveBitmapToFile(bitmap: Bitmap, captureEvent: MutableSharedFlow<Result<Unit>>) {
