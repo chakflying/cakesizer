@@ -18,8 +18,8 @@ android {
         applicationId = "com.nelc.cakesizer"
         minSdk = 26
         targetSdk = 33
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
         resourceConfigurations += listOf("en", "b+zh+HK")
         setProperty("archivesBaseName", "nelc-cakesizer-$versionName")
 
