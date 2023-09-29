@@ -27,32 +27,34 @@ class CakesServiceImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : CakesService {
     override suspend fun getCakes(): Result<List<Cake>> {
-        return try {
-            val response = client.request {
-                url {
-                    protocol = URLProtocol.HTTPS
-                    host = context.resources.getString(R.string.server_host)
-                    path("cakes.toml")
+        return withContext(Dispatchers.IO) {
+            return@withContext try {
+                val response = client.request {
+                    url {
+                        protocol = URLProtocol.HTTPS
+                        host = context.resources.getString(R.string.server_host)
+                        path("cakes.toml")
+                    }
+                    method = HttpMethod.Get
+                    contentType(ContentType.Application.Any)
                 }
-                method = HttpMethod.Get
-                contentType(ContentType.Application.Any)
+
+                when (response.status.value) {
+                    in 200..299 -> {
+                        val responseDecoded =
+                            Toml().read(response.bodyAsText()).to(CakesResponse::class.java)
+
+                        Result.success(responseDecoded.cakes)
+                    }
+
+                    else -> {
+                        Result.failure(Throwable("Request failed with ${response.status.value}"))
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                Result.failure(e)
             }
-
-            when (response.status.value) {
-                in 200..299 -> {
-                    val responseDecoded =
-                        Toml().read(response.bodyAsText()).to(CakesResponse::class.java)
-
-                    Result.success(responseDecoded.cakes)
-                }
-
-                else -> {
-                    Result.failure(Throwable("Request failed with ${response.status.value}"))
-                }
-            }
-        } catch (e: Exception) {
-            Timber.e(e)
-            Result.failure(e)
         }
     }
 
