@@ -88,7 +88,7 @@ class ArActivity : AppCompatActivity() {
     private var showShutterButton: Boolean = true
     private var showDetectionGrid: Boolean = true
 
-    private var modelPath: String? = null
+    private lateinit var modelPath: String
 
     private lateinit var settingsStore: SettingsStore
 
@@ -98,7 +98,7 @@ class ArActivity : AppCompatActivity() {
 
         val extras = intent.extras
 
-        modelPath = extras?.getString("modelPath")
+        modelPath = extras?.getString("modelPath") ?: "missing-model.glb"
 
         settingsStore = SettingsStore(this.applicationContext)
 

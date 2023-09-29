@@ -19,7 +19,7 @@ class ModelRenderer(
     context: Context,
     private val arCore: ArCore,
     private val filament: Filament,
-    modelPath: String?
+    modelPath: String
 ) {
     sealed class ModelEvent {
         data class Move(val screenPosition: ScreenPosition) : ModelEvent()
@@ -51,20 +51,10 @@ class ModelRenderer(
         coroutineScope.launch {
             val filamentAsset =
                 withContext(Dispatchers.IO) {
-                    if (modelPath == null) {
-                        context.assets
-                            .open("eren-hiphop-dance.glb")
-                            .use { input ->
-                                val bytes = ByteArray(input.available())
-                                input.read(bytes)
-                                filament.assetLoader.createAsset(ByteBuffer.wrap(bytes))!!
-                            }
-                    } else {
-                        Timber.i("Loading model from $modelPath")
-                        val file = File(modelPath)
-                        val buffer = file.readBytes()
-                        filament.assetLoader.createAsset(ByteBuffer.wrap(buffer))!!
-                    }
+                    Timber.i("Loading model from $modelPath")
+                    val file = File(modelPath)
+                    val buffer = file.readBytes()
+                    filament.assetLoader.createAsset(ByteBuffer.wrap(buffer))!!
                 }
                     .also { filament.resourceLoader.loadResources(it) }
 
