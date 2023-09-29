@@ -261,8 +261,6 @@ class ArActivity : AppCompatActivity() {
                 if (error !is UserCanceled) {
                     error.printStackTrace()
                 }
-            } finally {
-                finish()
             }
         }
     }
@@ -283,8 +281,6 @@ class ArActivity : AppCompatActivity() {
                 if (error !is UserCanceled) {
                     error.printStackTrace()
                 }
-
-                finish()
             }
         }
     }

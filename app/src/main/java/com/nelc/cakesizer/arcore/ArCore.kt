@@ -13,14 +13,16 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
-import com.nelc.cakesizer.*
-import com.nelc.cakesizer.filament.Filament
 import com.google.android.filament.*
 import com.google.android.filament.RenderableManager.PrimitiveType
 import com.google.android.filament.VertexBuffer.AttributeType
 import com.google.android.filament.VertexBuffer.VertexAttribute
 import com.google.ar.core.*
 import com.google.ar.core.exceptions.NotYetAvailableException
+import com.nelc.cakesizer.*
+import com.nelc.cakesizer.filament.Filament
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -78,8 +80,11 @@ class ArCore(val activity: Activity, val filament: Filament, private val view: V
 
     private lateinit var depthTexture: Texture
 
-    fun destroy() {
-        session.close()
+    suspend fun destroy() {
+        withContext(Dispatchers.IO) {
+            Timber.i("Closing ArCore Session...")
+            session.close()
+        }
     }
 
     private var displayRotationDegrees: Int = 0
@@ -129,16 +134,19 @@ class ArCore(val activity: Activity, val filament: Filament, private val view: V
                     cameraWidth = dimensions[0]
                     cameraHeight = dimensions[1]
                 }
+
                 else -> {
                     cameraWidth = dimensions[1]
                     cameraHeight = dimensions[0]
                 }
             }
+
             else -> when (displayRotation) {
                 Surface.ROTATION_0, Surface.ROTATION_180 -> {
                     cameraWidth = dimensions[1]
                     cameraHeight = dimensions[0]
                 }
+
                 else -> {
                     cameraWidth = dimensions[0]
                     cameraHeight = dimensions[1]

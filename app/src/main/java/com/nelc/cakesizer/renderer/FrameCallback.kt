@@ -35,6 +35,9 @@ class FrameCallback(
             return
         }
 
+        @Suppress("SENSELESS_COMPARISON")
+        if (arCore.activity == null) return
+
         lastTick = tick
 
         try {
@@ -72,5 +75,6 @@ class FrameCallback(
 
     fun stop() {
         choreographer.removeFrameCallback(this)
+        Timber.i("frameCallback stopped")
     }
 }
