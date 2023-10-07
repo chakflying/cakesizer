@@ -7,6 +7,7 @@ import android.hardware.camera2.CameraManager
 import android.media.Image
 import android.os.Build
 import android.os.Handler
+import android.os.Looper
 import android.util.DisplayMetrics
 import android.view.Surface
 import android.view.View
@@ -256,8 +257,7 @@ class ArCore(val activity: Activity, val filament: Filament, private val view: V
                                     0,
                                     0,
                                     0,
-                                    @Suppress("DEPRECATION")
-                                    Handler(),
+                                    Handler(Looper.getMainLooper()),
                                 ) {
                                     depthImage.close()
                                     hasDepthImage = false
@@ -469,8 +469,8 @@ class ArCore(val activity: Activity, val filament: Filament, private val view: V
     }
 
     private fun tessellation(): ModelBuffers {
-        val tesWidth = 12
-        val tesHeight = 12
+        val tesWidth = 2
+        val tesHeight = 2
 
         val clipPosition: V2A = (((tesWidth * tesHeight) + tesWidth + tesHeight + 1) * dimenV2A)
             .let { FloatArray(it) }
