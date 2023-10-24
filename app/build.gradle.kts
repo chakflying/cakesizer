@@ -90,6 +90,9 @@ android {
 
     packaging {
         resources.excludes += "DebugProbesKt.bin"
+
+        // Workaround until kotlinx-datetime 0.4.2 is released
+        resources.excludes += "META-INF/versions/9/previous-compilation-data.bin"
     }
 }
 

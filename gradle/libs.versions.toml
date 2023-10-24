@@ -1,13 +1,12 @@
 [versions]
 accompanist = "0.30.1"
-androidGradlePlugin = "8.1.1"
-androidMaterial = "1.9.0"
+androidGradlePlugin = "8.1.2"
+androidMaterial = "1.10.0"
 androidxArchCore = "2.2.0"
 androidxCore = "1.12.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxActivity = "1.7.2"
-androidxComposeBom = "2023.09.02"
-androidxCoroutines = "1.7.2"
+androidxComposeBom = "2023.10.00"
 androidxDatastorePreferences = "1.0.0"
 androidxFragment = "1.6.1"
 androidxLifecycle = "2.6.2"
@@ -24,13 +23,14 @@ hilt = "2.48"
 hiltCore = "1.0.0"
 kotlin = "1.9.10"
 kotlinxDatetime = "0.4.1"
+kotlinxCoroutines = "1.7.3"
 googleServices = "4.3.15"
-firebaseBom = "32.3.1"
+firebaseBom = "32.4.0"
 firebase = "2.9.9"
 arrow = "1.2.0"
 slf4jTimber = "1.0.1"
 timber = "5.0.1"
-ktor = "2.3.0"
+ktor = "2.3.5"
 toml4j = "0.7.2"
 
 [libraries]
@@ -57,9 +57,9 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCore" }
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "androidxCoroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "androidxCoroutines" }
-kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "androidxCoroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 lifecycle-common-java8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "androidxLifecycle" }
 lifecycle-livedata-core-ktx = { module = "androidx.lifecycle:lifecycle-livedata-core-ktx", version.ref = "androidxLifecycle" }
