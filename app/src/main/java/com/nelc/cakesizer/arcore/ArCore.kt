@@ -54,9 +54,7 @@ class ArCore(val activity: Activity, val filament: Filament, private val view: V
                 .apply {
                     planeFindingMode = Config.PlaneFindingMode.HORIZONTAL
                     focusMode = Config.FocusMode.FIXED
-                    imageStabilizationMode =
-                        if (session.isImageStabilizationModeSupported(Config.ImageStabilizationMode.EIS)) Config.ImageStabilizationMode.EIS
-                        else Config.ImageStabilizationMode.OFF
+                    imageStabilizationMode = Config.ImageStabilizationMode.OFF
 
                     // reading depth information is broken with latest filament
                     depthMode =
