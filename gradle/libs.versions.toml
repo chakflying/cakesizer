@@ -15,12 +15,12 @@ androidxPreference = "1.2.1"
 androidxSavedstate = "1.2.1"
 androidxWorkManager = "2.8.1"
 appcompat = "1.6.1"
-arcore = "1.39.0"
+arcore = "1.40.0"
 coil = "2.4.0"
 constraintlayout = "2.1.4"
 filament = "1.43.0"
 hilt = "2.48"
-hiltCore = "1.0.0"
+androidxHilt = "1.1.0"
 kotlin = "1.9.10"
 kotlinxDatetime = "0.4.1"
 kotlinxCoroutines = "1.7.3"
@@ -34,7 +34,6 @@ ktor = "2.3.5"
 toml4j = "0.7.2"
 
 [libraries]
-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 accompanist-placeholder = { module = "com.google.accompanist:accompanist-placeholder", version.ref = "accompanist" }
 activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "androidxActivity" }
@@ -55,8 +54,7 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "andro
 gltfio-android = { module = "com.google.android.filament:gltfio-android", version.ref = "filament" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
-hilt-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltCore" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
@@ -77,7 +75,7 @@ navigation-testing = { module = "androidx.navigation:navigation-testing", versio
 navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "androidxNavigation" }
 preference-ktx = { module = "androidx.preference:preference-ktx", version.ref = "androidxPreference" }
 savedstate-ktx = { module = "androidx.savedstate:savedstate-ktx", version.ref = "androidxSavedstate" }
-compose-ui = { module = "androidx.compose.ui:ui" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
 compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
