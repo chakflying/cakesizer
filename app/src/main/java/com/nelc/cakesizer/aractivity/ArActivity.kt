@@ -601,7 +601,7 @@ class ArActivity : AppCompatActivity() {
     }
 
     private fun back() {
-        onBackPressed()
+        onBackPressedDispatcher.onBackPressed()
     }
 
     private fun saveBitmapToFile(bitmap: Bitmap, captureEvent: MutableSharedFlow<Result<Unit>>) {
