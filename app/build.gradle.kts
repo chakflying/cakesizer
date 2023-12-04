@@ -26,7 +26,12 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {}
+        getByName("debug") {
+            manifestPlaceholders += mapOf(
+                "appIcon" to "@mipmap/ic_launcher_debug",
+                "appIconRound" to "@mipmap/ic_launcher_debug_round"
+            )
+        }
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -38,6 +43,10 @@ android {
             ndk {
                 debugSymbolLevel = "FULL"
             }
+            manifestPlaceholders += mapOf(
+                "appIcon" to "@mipmap/ic_launcher",
+                "appIconRound" to "@mipmap/ic_launcher_round"
+            )
         }
     }
 
@@ -167,7 +176,7 @@ dependencies {
 
     implementation(libs.material)
 
-    implementation (libs.arcore)
+    implementation(libs.arcore)
 
     implementation(libs.filament.android)
     implementation(libs.filament.utils.android)
